@@ -24,6 +24,7 @@ Options:
 # The board is represented by a row-major 2D list of characters, 0 indexed
 # A point is a tuple of (int, int) representing (row, column)
 # A move is a tuple of (point, point) representing (origin, destination)
+# A jump is a move of length 2
 ###########################################################################
 
 from copy import deepcopy
@@ -115,13 +116,23 @@ def onBoard(rows, cols, point):
 def getNeighbors(board, point):
   rows = len(board)
   cols = len(board[0])
-  return filter(lambda pt: onBoard(rows, cols, pt), [(point[0]-1, point[1])
-                                                    , (point[0]+1, point[1])
-                                                    , (point[0], point[1]-1)
-                                                    , (point[0], point[1]+1)])
+  return set(filter(lambda pt: onBoard(rows, cols, pt), [(point[0]-1, point[1])
+                                                        , (point[0]+1, point[1])
+                                                        , (point[0], point[1]-1)
+                                                        , (point[0], point[1]+1)]))
+
+def getCorners(board):
+  return set([(0, 0), (len(board), 0), (0, len(board[0])), (len(board), len(board[0]))])
+
+def getMiddles(board):
+  rm = (len(board) - 1)/2.
+  rowMid = [math.floor(rm), math.ceil(rm)]
+  cm = (len(board[0]) - 1)/2.
+  colMid = [math.floor(cm), math.ceil(cm)]
+  return set([(int(r), int(c)) for r in rowMid for c in colMid])
 
 def getEmptySquares(board):
-  return ((r, c) for r in range(len(board)) for c in range(len(board[0])) if board[r][c] == " ")
+  return set((r, c) for r in range(len(board)) for c in range(len(board[0])) if board[r][c] == " ")
 
 def printBoard(board):
   for row in board:
