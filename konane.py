@@ -5,16 +5,17 @@ Play a game of Konane between two players, either of whom can be 1) Human
 2) Random or 3) An AI of your construction!
 
 Usage:
-  ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [--depth1=<p1depth>] [--depth2=<p2depth>]
+  ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [--depth1=<p1depth>] [--depth2=<p2depth>] [-i <iter>]
 
 Options:
-  -1 <p1type>                 Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
-  -2 <p2type>                 Sets the player type for player 2.  [default: R]
-  -c <cols>, --cols=<cols>    Sets the number of columns on the board.  [default: 10]
-  --depth1=<p1depth>          Sets the maximum depth for player 1.  [default: 4]
-  --depth2=<p2depth>          Sets the maximum depth for player 2.  [default: 4]
-  -h --help                   Show this screen.
-  -r <rows>, --rows=<rows>    Sets the number of rows on the board.  [default: 10]
+  -1 <p1type>                      Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
+  -2 <p2type>                      Sets the player type for player 2.  [default: R]
+  -c <cols>, --cols=<cols>         Sets the number of columns on the board.  [default: 10]
+  --depth1=<p1depth>               Sets the maximum depth for player 1.  [default: 4]
+  --depth2=<p2depth>               Sets the maximum depth for player 2.  [default: 4]
+  -h --help                        Show this screen.
+  -r <rows>, --rows=<rows>         Sets the number of rows on the board.  [default: 10]
+  -i <iter>, --iterations=<iter>   Sets the number of games to run.  [default: 1]
 """
   # -v                          Verbose mode.
 
@@ -46,14 +47,22 @@ def isLegalMove(curBoard, player, move):
   if pieceAt(curBoard, move[0]) != player:
     print "You can only move your own pieces"
     return False
-  if moveLength(move) % 2 == 1:
+  length = moveLength(move)
+  if length % 2 == 1:
     print "Cannot move an odd number of squares"
     return False
-  for subMove in interpolateMove(move):
-    # TODO: check that each jump is over an enemy
-    # TODO: check that each jump lands on an open space
-    pass
+  if length == 0:
+    print "Cannot stay put"
+    return False
   other = 'o' if player == 'x' else 'x'
+  for jump in interpolateMove(move):
+    if not isLegalJump(curBoard, player, other, jump):
+      print "Illegal move"
+      return False
+  return True
+
+def isLegalJump(curBoard, player, other, jump):
+  return pieceAt(curBoard, jump[0]) == player and pieceAt(curBoard, midPoint(jump)) == other and pieceAt(curBoard, jump[1]) == " "
 
 def interpolateMove(move):
   rangeIndex = -1
@@ -68,6 +77,14 @@ def interpolateMove(move):
   step = 2 if move[0][rangeIndex] < move[1][rangeIndex] else -2
   points = [(move[0][constIndex], c) for c in range(move[0][rangeIndex], move[1][rangeIndex] + step, step)]
   return izip(points, points[1:])
+
+def midPoint(move):
+  if horizontalMove(move):
+    return (move[0][0], (move[0][1]+move[1][1])/2)
+  elif verticalMove(move):
+    return ((move[0][0]+move[1][0])/2, move[0][1])
+  else:
+    print "Cannot move diagonally"
 
 def horizontalMove(move):
   return move[0][0] == move[1][0]
@@ -102,4 +119,5 @@ if __name__ == "__main__":
   cols = int(arguments["--cols"])
   board = [['x' if (r+c)%2 == 0 else 'o' for c in range(cols)] for r in range(rows)]
   printBoard(board)
-  # print arguments["--rows"]
+  iterations = int(arguments["--iterations"])
+  # TODO: run the game for the appropriate number of iterations
