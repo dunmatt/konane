@@ -45,9 +45,9 @@ def makePlayer(playerType, depth, symbol):
 
 if __name__ == "__main__":
   arguments = docopt(__doc__, version="Konane v1.0")
+  iterations = int(arguments["--iterations"])
   rows = int(arguments["--rows"])
   cols = int(arguments["--cols"])
-  iterations = int(arguments["--iterations"])
   p1t = capitalize(arguments["-1"])
   p1d = arguments["--depth1"]
   p2t = capitalize(arguments["-2"])

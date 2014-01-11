@@ -110,6 +110,12 @@ def getMiddles(board):
 def getEmptySquares(board):
   return set((r, c) for r in range(len(board)) for c in range(len(board[0])) if board[r][c] == " ")
 
+def getFirstMovesForX(board):
+  return set(filter(lambda pt: pieceAt(board, pt) == 'x', getCorners(board).union(getMiddles(board))))
+
+def getFirstMovesForO(board):
+  return getNeighbors(board, getEmptySquares(board).pop())
+
 def printBoard(board):
   for row in board:
     print "".join(row)
