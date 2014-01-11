@@ -48,3 +48,5 @@ if __name__ == "__main__":
   # TODO: run the game for the appropriate number of iterations
   # TODO: populate the two players based on the args
   gm = game_manager.GameManager(rows, cols, None, None)
+  gm.reset()
+  gm.play()
