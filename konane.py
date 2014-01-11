@@ -17,13 +17,16 @@ Options:
   -r <rows>, --rows=<rows>         Sets the number of rows on the board.  [default: 10]
   -i <iter>, --iterations=<iter>   Sets the number of games to run.  [default: 1]
 """
-  # -v                          Verbose mode.
+  # -v                               Verbose mode.
 
+###########################################################################
 # Explanation of the types:
 # The board is represented by a row-major 2D list of characters, 0 indexed
 # A point is a tuple of (int, int) representing (row, column)
 # A move is a tuple of (point, point) representing (origin, destination)
+###########################################################################
 
+from copy import deepcopy
 from docopt import docopt
 from itertools import izip
 
@@ -35,16 +38,27 @@ import math
 
 
 
+def makeMove(board, move):
+  if isLegalMove(board, pieceAt(move[0]), move):
+    newBoard = deepcopy(board)
+    for jump in interpolateMove(move):
+      makeJump(newBoard, jump)
+    return (newBoard, True)
+  else:
+    print "Illegal move, ignoring"
+    return (board, False)
 
-
-def makeMove(curBoard, move):
-  pass
+def makeJump(board, jump):
+  mid = midPoint(jump)
+  board[mid[0]][mid[1]] = " "
+  board[jump[1][0]][jump[1][1]] = board[jump[0][0]][jump[0][1]]
+  board[jump[0][0]][jump[0][1]] = " "
 
 def moveLength(move):
   return math.abs(move[0][0] - move[1][0]) if verticalMove(move) else math.abs(move[0][1] - move[1][1])
 
-def isLegalMove(curBoard, player, move):
-  if pieceAt(curBoard, move[0]) != player:
+def isLegalMove(board, player, move):
+  if pieceAt(board, move[0]) != player:
     print "You can only move your own pieces"
     return False
   length = moveLength(move)
@@ -56,13 +70,13 @@ def isLegalMove(curBoard, player, move):
     return False
   other = 'o' if player == 'x' else 'x'
   for jump in interpolateMove(move):
-    if not isLegalJump(curBoard, player, other, jump):
+    if not isLegalJump(board, player, other, jump):
       print "Illegal move"
       return False
   return True
 
-def isLegalJump(curBoard, player, other, jump):
-  return pieceAt(curBoard, jump[0]) == player and pieceAt(curBoard, midPoint(jump)) == other and pieceAt(curBoard, jump[1]) == " "
+def isLegalJump(board, player, other, jump):
+  return pieceAt(board, jump[0]) == player and pieceAt(board, midPoint(jump)) == other and pieceAt(board, jump[1]) == " "
 
 def interpolateMove(move):
   rangeIndex = -1
@@ -92,8 +106,8 @@ def horizontalMove(move):
 def verticalMove(move):
   return move[0][1] == move[1][1]
 
-def pieceAt(curBoard, point):
-  return curBoard[point[0]][curBoard[point[1]]]
+def pieceAt(board, point):
+  return board[point[0]][board[point[1]]]
 
 def onBoard(rows, cols, point):
   return 0 <= point[0] and point[0] < rows and 0 <= point[1] and point[1] < cols
