@@ -29,7 +29,7 @@ Options:
 
 from docopt import docopt
 
-import game_rules
+import game_manager
 
 
 
@@ -42,7 +42,9 @@ if __name__ == "__main__":
   arguments = docopt(__doc__, version="Konane v1.0")
   rows = int(arguments["--rows"])
   cols = int(arguments["--cols"])
-  board = game_rules.makeBoard(rows, cols)
-  game_rules.printBoard(board)
+  # board = game_rules.makeBoard(rows, cols)
+  # game_rules.printBoard(board)
   iterations = int(arguments["--iterations"])
   # TODO: run the game for the appropriate number of iterations
+  # TODO: populate the two players based on the args
+  gm = game_manager.GameManager(rows, cols, None, None)
