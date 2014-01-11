@@ -58,17 +58,16 @@ def isLegalJump(board, player, other, jump):
   return pieceAt(board, jump[0]) == player and pieceAt(board, midPoint(jump)) == other and pieceAt(board, jump[1]) == " "
 
 def interpolateMove(move):
-  rangeIndex = -1
+  points = []
   if horizontalMove(move):
-    rangeIndex = 1
+    step = 2 if move[0][1] < move[1][1] else -2
+    points = [(move[0][0], c) for c in range(move[0][1], move[1][1] + step, step)]
   elif verticalMove(move):
-    rangeIndex = 0
+    step = 2 if move[0][0] < move[1][0] else -2
+    points = [(r, move[0][1]) for r in range(move[0][0], move[1][0] + step, step)]
   else:
     print "Cannot move diagonally"
     return []
-  constIndex = 0 if rangeIndex else 1
-  step = 2 if move[0][rangeIndex] < move[1][rangeIndex] else -2
-  points = [(move[0][constIndex], c) for c in range(move[0][rangeIndex], move[1][rangeIndex] + step, step)]
   return izip(points, points[1:])
 
 def midPoint(move):

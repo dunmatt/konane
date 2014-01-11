@@ -55,7 +55,6 @@ class GameManager:
       self.stage = X_VICTORY
 
   def _handleTurnX(self, playerBoard, board):
-    print "xs turn"
     self.stage = O_TURN
     (self.board, legal) = game_rules.makePlayerMove(board, 'x', self.p1.getMove(playerBoard))
     if not legal:
