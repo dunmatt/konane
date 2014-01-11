@@ -16,16 +16,18 @@ def makeBoard(rows, cols):
   return [['x' if (r+c)%2 == 0 else 'o' for c in range(cols)] for r in range(rows)]
 
 def makeMove(board, move):
-  if isLegalMove(board, pieceAt(move[0]), move):
+  return makePlayerMove(board, pieceAt(move[0]), move)
+
+def makePlayerMove(board, player, move):
+  if isLegalMove(board, player, move):
     newBoard = deepcopy(board)
     for jump in interpolateMove(move):
-      makeJump(newBoard, jump)
+      _makeJump(newBoard, jump)
     return (newBoard, True)
   else:
-    print "Illegal move, ignoring"
     return (board, False)
 
-def makeJump(board, jump):
+def _makeJump(board, jump):
   mid = midPoint(jump)
   board[mid[0]][mid[1]] = " "
   board[jump[1][0]][jump[1][1]] = board[jump[0][0]][jump[0][1]]

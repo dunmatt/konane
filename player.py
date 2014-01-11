@@ -15,7 +15,7 @@ class Player:
   def selectInitialO(self, board):
     pass
 
-  def makeMove(self, board):
+  def getMove(self, board):
     pass
 
 
@@ -32,7 +32,7 @@ class MinimaxPlayer(Player):
     # TODO: write me
     pass
 
-  def makeMove(self, board):
+  def getMove(self, board):
     # TODO: write me
     pass
 
@@ -49,7 +49,7 @@ class RandomPlayer(Player):
     # TODO: write me
     pass
 
-  def makeMove(self, board):
+  def getMove(self, board):
     # TODO: write me
     pass
 
@@ -79,7 +79,7 @@ class HumanPlayer(Player):
       pt = self._promptForPoint("Enter a valid starting location for player O (in the format 'row column'): ")
     return pt
 
-  def makeMove(self, board):
+  def getMove(self, board):
     game_rules.printBoard(board)
     origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % self.symbol)
     destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (self.symbol, origin[0], origin[1]))
