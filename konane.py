@@ -28,25 +28,34 @@ Options:
 ###########################################################################
 
 from docopt import docopt
+from player import HumanPlayer, MinimaxPlayer, RandomPlayer
+from string import capitalize
 
 import game_manager
 
-
-
-
-
-
-
+def makePlayer(playerType, depth, symbol):
+  if playerType[0] == 'H':
+    return HumanPlayer(symbol)
+  elif playerType[0] == 'R':
+    return RandomPlayer(symbol)
+  elif playerType[0] == 'M':
+    return MinimaxPlayer(symbol, depth)
+  else:
+    print "Unrecognized playerType %s for player %s" % (playerType, symbol)
 
 if __name__ == "__main__":
   arguments = docopt(__doc__, version="Konane v1.0")
   rows = int(arguments["--rows"])
   cols = int(arguments["--cols"])
-  # board = game_rules.makeBoard(rows, cols)
-  # game_rules.printBoard(board)
   iterations = int(arguments["--iterations"])
+  p1t = capitalize(arguments["-1"])
+  p1d = arguments["--depth1"]
+  p2t = capitalize(arguments["-2"])
+  p2d = arguments["--depth2"]
   # TODO: run the game for the appropriate number of iterations
   # TODO: populate the two players based on the args
-  gm = game_manager.GameManager(rows, cols, None, None)
+  gm = game_manager.GameManager(rows, cols
+                                , makePlayer(p1t, p1d, 'x')
+                                , makePlayer(p2t, p2d, 'o'))
   gm.reset()
   gm.play()
