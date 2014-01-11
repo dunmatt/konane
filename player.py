@@ -3,7 +3,7 @@
 import game_rules
 import random
 
-class Player:
+class Player(object):
   """ This is the player interface that is consumed by the GameManager.
   """
   def __init__(self, symbol):

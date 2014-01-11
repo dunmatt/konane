@@ -34,9 +34,9 @@ class GameManager:
     elif self.stage == AWAITING_INITIAL_O:
       self._handleInitialO(playerBoard, self.board)
     elif self.stage == X_TURN:
-      self._handleInitialX(playerBoard, self.board)
+      self._handleTurnX(playerBoard, self.board)
     elif self.stage == O_TURN:
-      self._handleInitialO(playerBoard, self.board)
+      self._handleTurnO(playerBoard, self.board)
 
   def _handleInitialX(self, playerBoard, board):
     pt = self.p1.selectInitialX(playerBoard)
@@ -55,6 +55,7 @@ class GameManager:
       self.stage = X_VICTORY
 
   def _handleTurnX(self, playerBoard, board):
+    print "xs turn"
     self.stage = O_TURN
     (self.board, legal) = game_rules.makePlayerMove(board, 'x', self.p1.getMove(playerBoard))
     if not legal:

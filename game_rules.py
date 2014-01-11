@@ -34,7 +34,7 @@ def _makeJump(board, jump):
   board[jump[0][0]][jump[0][1]] = " "
 
 def moveLength(move):
-  return math.abs(move[0][0] - move[1][0]) if verticalMove(move) else math.abs(move[0][1] - move[1][1])
+  return abs(move[0][0] - move[1][0]) if verticalMove(move) else abs(move[0][1] - move[1][1])
 
 def isLegalMove(board, player, move):
   if pieceAt(board, move[0]) != player:
@@ -86,7 +86,7 @@ def verticalMove(move):
   return move[0][1] == move[1][1]
 
 def pieceAt(board, point):
-  return board[point[0]][board[point[1]]]
+  return board[point[0]][point[1]]
 
 def onBoard(rows, cols, point):
   return 0 <= point[0] and point[0] < rows and 0 <= point[1] and point[1] < cols
@@ -100,7 +100,7 @@ def getNeighbors(board, point):
                                                         , (point[0], point[1]+1)]))
 
 def getCorners(board):
-  return set([(0, 0), (len(board), 0), (0, len(board[0])), (len(board), len(board[0]))])
+  return set([(0, 0), (len(board)-1, 0), (0, len(board[0])-1), (len(board)-1, len(board[0])-1)])
 
 def getMiddles(board):
   rm = (len(board) - 1) / 2.
