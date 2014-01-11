@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from string import capitalize
 import game_rules
 import random
 
@@ -42,16 +43,21 @@ class RandomPlayer(Player):
     super(RandomPlayer, self).__init__(symbol)
 
   def selectInitialX(self, board):
-    # TODO: write me
-    pass
+    validMoves = game_rules.getFirstMovesForX(board)
+    return random.choice(list(validMoves))
 
   def selectInitialO(self, board):
-    # TODO: write me
-    pass
+    validMoves = game_rules.getFirstMovesForO(board)
+    return random.choice(list(validMoves))
 
   def getMove(self, board):
-    # TODO: write me
-    pass
+    mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == self.symbol]
+    allMoves = [(o, d) for o in mine for d in game_rules.getEmptySquares(board)]
+    legalMoves = filter(lambda move: game_rules.isLegalMove(board, self.symbol, move, False), allMoves)
+    if len(legalMoves) > 0:
+      return random.choice(legalMoves)
+    else:
+      return ((0, 1), (2, 3))
 
 
 class HumanPlayer(Player):
@@ -81,6 +87,6 @@ class HumanPlayer(Player):
 
   def getMove(self, board):
     game_rules.printBoard(board)
-    origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % self.symbol)
-    destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (self.symbol, origin[0], origin[1]))
+    origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % capitalize(self.symbol))
+    destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (capitalize(self.symbol), origin[0], origin[1]))
     return (origin, destination)

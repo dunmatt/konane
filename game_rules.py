@@ -36,22 +36,30 @@ def _makeJump(board, jump):
 def moveLength(move):
   return abs(move[0][0] - move[1][0]) if verticalMove(move) else abs(move[0][1] - move[1][1])
 
-def isLegalMove(board, player, move):
+def isLegalMove(board, player, move, loud=True):
+  if not onBoard(len(board), len(board[0]), move[1]):
+    if loud:
+      print "Pieces must stay on the board"
+    return False
   if pieceAt(board, move[0]) != player:
-    print "You can only move your own pieces"
+    if loud:
+      print "You can only move your own pieces"
     return False
   length = moveLength(move)
   if length % 2 == 1:
-    print "Cannot move an odd number of squares"
+    if loud:
+      print "Cannot move an odd number of squares"
     return False
   if length == 0:
-    print "Cannot stay put"
+    if loud:
+      print "Cannot stay put"
     return False
   other = 'o' if player == 'x' else 'x'
   hasJumped = False
   for jump in interpolateMove(move):
     if not isLegalJump(board, player, other, jump):
-      print "Illegal move"
+      if loud:
+        print "Illegal move"
       return False
     hasJumped = True
   return hasJumped
@@ -68,7 +76,6 @@ def interpolateMove(move):
     step = 2 if move[0][0] < move[1][0] else -2
     points = [(r, move[0][1]) for r in range(move[0][0], move[1][0] + step, step)]
   else:
-    print "Cannot move diagonally"
     return []
   return izip(points, points[1:])
 

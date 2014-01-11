@@ -17,7 +17,6 @@ Options:
   -r <rows>, --rows=<rows>         Sets the number of rows on the board.  [default: 10]
   -i <iter>, --iterations=<iter>   Sets the number of games to run.  [default: 1]
 """
-  # -v                               Verbose mode.
 
 ###########################################################################
 # Explanation of the types:
@@ -52,11 +51,10 @@ if __name__ == "__main__":
   p1d = arguments["--depth1"]
   p2t = capitalize(arguments["-2"])
   p2d = arguments["--depth2"]
-  # TODO: run the game for the appropriate number of iterations
-  # TODO: populate the two players based on the args
   gm = game_manager.GameManager(rows, cols
                                 , makePlayer(p1t, p1d, 'x')
                                 , makePlayer(p2t, p2d, 'o'))
+  # TODO: run the game for the appropriate number of iterations
   gm.reset()
   gm.play()
   if gm.state == game_manager.X_VICTORY:
