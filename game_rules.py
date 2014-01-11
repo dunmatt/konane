@@ -48,11 +48,13 @@ def isLegalMove(board, player, move):
     print "Cannot stay put"
     return False
   other = 'o' if player == 'x' else 'x'
+  hasJumped = False
   for jump in interpolateMove(move):
     if not isLegalJump(board, player, other, jump):
       print "Illegal move"
       return False
-  return True
+    hasJumped = True
+  return hasJumped
 
 def isLegalJump(board, player, other, jump):
   return pieceAt(board, jump[0]) == player and pieceAt(board, midPoint(jump)) == other and pieceAt(board, jump[1]) == " "

@@ -59,3 +59,7 @@ if __name__ == "__main__":
                                 , makePlayer(p2t, p2d, 'o'))
   gm.reset()
   gm.play()
+  if gm.state == game_manager.X_VICTORY:
+    print "X Wins!!"
+  if gm.state == game_manager.O_VICTORY:
+    print "O Wins!!"
