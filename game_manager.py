@@ -17,10 +17,10 @@ class GameManager:
     self.cols = cols
     self.p1 = player1
     self.p2 = player2
-    self.state = AWAITING_INITIAL_X
     self.reset()
 
   def reset(self):
+    self.state = AWAITING_INITIAL_X
     self.board = game_rules.makeBoard(self.rows, self.cols)
 
   def play(self):
