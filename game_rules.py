@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from copy import deepcopy
-from itertools import izip
 import math
 
 ###########################################################################
@@ -39,27 +38,27 @@ def moveLength(move):
 def isLegalMove(board, player, move, loud=True):
   if not onBoard(len(board), len(board[0]), move[1]):
     if loud:
-      print "Pieces must stay on the board"
+      print("Pieces must stay on the board")
     return False
   if pieceAt(board, move[0]) != player:
     if loud:
-      print "You can only move your own pieces"
+      print("You can only move your own pieces")
     return False
   length = moveLength(move)
   if length % 2 == 1:
     if loud:
-      print "Cannot move an odd number of squares"
+      print("Cannot move an odd number of squares")
     return False
   if length == 0:
     if loud:
-      print "Cannot stay put"
+      print("Cannot stay put")
     return False
   other = 'o' if player == 'x' else 'x'
   hasJumped = False
   for jump in interpolateMove(move):
     if not isLegalJump(board, player, other, jump):
       if loud:
-        print "Illegal move"
+        print("Illegal move")
       return False
     hasJumped = True
   return hasJumped
@@ -77,15 +76,15 @@ def interpolateMove(move):
     points = [(r, move[0][1]) for r in range(move[0][0], move[1][0] + step, step)]
   else:
     return []
-  return izip(points, points[1:])
+  return zip(points, points[1:])
 
 def midPoint(move):
   if horizontalMove(move):
-    return (move[0][0], (move[0][1]+move[1][1])/2)
+    return (move[0][0], int((move[0][1]+move[1][1])/2))
   elif verticalMove(move):
-    return ((move[0][0]+move[1][0])/2, move[0][1])
+    return (int((move[0][0]+move[1][0])/2), move[0][1])
   else:
-    print "Cannot move diagonally"
+    print("Cannot move diagonally")
 
 def horizontalMove(move):
   return move[0][0] == move[1][0]
@@ -128,4 +127,4 @@ def getFirstMovesForO(board):
 
 def printBoard(board):
   for row in board:
-    print "".join(row)
+    print("".join(row))

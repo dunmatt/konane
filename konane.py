@@ -28,7 +28,6 @@ Options:
 
 from docopt import docopt
 from player import HumanPlayer, MinimaxPlayer, RandomPlayer
-from string import capitalize
 
 import game_manager
 
@@ -40,16 +39,16 @@ def makePlayer(playerType, depth, symbol):
   elif playerType[0] == 'M':
     return MinimaxPlayer(symbol, depth)
   else:
-    print "Unrecognized playerType %s for player %s" % (playerType, symbol)
+    print("Unrecognized playerType %s for player %s" % (playerType, symbol))
 
 if __name__ == "__main__":
   arguments = docopt(__doc__, version="Konane v1.0")
   iterations = int(arguments["--iterations"])
   rows = int(arguments["--rows"])
   cols = int(arguments["--cols"])
-  p1t = capitalize(arguments["-1"])
+  p1t = arguments["-1"].capitalize()
   p1d = arguments["--depth1"]
-  p2t = capitalize(arguments["-2"])
+  p2t = arguments["-2"].capitalize()
   p2d = arguments["--depth2"]
   gm = game_manager.GameManager(rows, cols
                                 , makePlayer(p1t, p1d, 'x')
@@ -58,6 +57,6 @@ if __name__ == "__main__":
   gm.reset()
   gm.play()
   if gm.state == game_manager.X_VICTORY:
-    print "X Wins!!"
+    print("X Wins!!")
   if gm.state == game_manager.O_VICTORY:
-    print "O Wins!!"
+    print("O Wins!!")

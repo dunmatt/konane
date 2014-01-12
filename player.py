@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from string import capitalize
 import game_rules
 import random
 
@@ -53,7 +52,7 @@ class RandomPlayer(Player):
   def getMove(self, board):
     mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == self.symbol]
     allMoves = [(o, d) for o in mine for d in game_rules.getEmptySquares(board)]
-    legalMoves = filter(lambda move: game_rules.isLegalMove(board, self.symbol, move, False), allMoves)
+    legalMoves = list(filter(lambda move: game_rules.isLegalMove(board, self.symbol, move, False), allMoves))
     if len(legalMoves) > 0:
       return random.choice(legalMoves)
     else:
@@ -87,6 +86,6 @@ class HumanPlayer(Player):
 
   def getMove(self, board):
     game_rules.printBoard(board)
-    origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % capitalize(self.symbol))
-    destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (capitalize(self.symbol), origin[0], origin[1]))
+    origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % self.symbol.capitalize())
+    destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (self.symbol.capitalize(), origin[0], origin[1]))
     return (origin, destination)
