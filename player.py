@@ -3,6 +3,14 @@
 import game_rules
 import random
 
+###########################################################################
+# Explanation of the types:
+# The board is represented by a row-major 2D list of characters, 0 indexed
+# A point is a tuple of (int, int) representing (row, column)
+# A move is a tuple of (point, point) representing (origin, destination)
+# A jump is a move of length 2
+###########################################################################
+
 class Player(object):
   """ This is the player interface that is consumed by the GameManager.
   """
