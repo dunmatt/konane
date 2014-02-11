@@ -15,7 +15,7 @@ def makeBoard(rows, cols):
   return [['x' if (r+c)%2 == 0 else 'o' for c in range(cols)] for r in range(rows)]
 
 def makeMove(board, move):
-  return makePlayerMove(board, pieceAt(move[0]), move)
+  return makePlayerMove(board, pieceAt(board, move[0]), move)
 
 def makePlayerMove(board, player, move):
   if isLegalMove(board, player, move):
