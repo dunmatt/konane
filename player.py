@@ -48,12 +48,29 @@ class MinimaxPlayer(Player):
     return (0, 0)
 
   def selectInitialO(self, board):
-    # TODO: write me
-    pass
+    validMoves = game_rules.getFirstMovesForO(board)
+    return random.choice(list(validMoves))
 
   def getMove(self, board):
-    # TODO: write me
-    pass
+    return self.negamax(board, self.depthLimit, self.symbol)
+
+  def negamax(self, board, depth, symbol):
+    mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == symbol]
+    allMoves = [(o, d) for o in mine for d in game_rules.getEmptySquares(board)]
+    legalMoves = list(filter(lambda move: game_rules.isLegalMove(board, symbol, move, False), allMoves))
+    if depth == 0 or len(legalMoves) == 0:
+      h = 1  # TODO: write a heuristic and use it here
+      return (h if self.symbol == symbol else -h, board)
+    best = -1000000000  # TODO: figure out how python does neginf
+    bestMove = None
+    for move in legalMoves:
+      child = game_rules.makeMove(board, move)[0]
+      (score, choice) = self.negamax(child, depth-1, 'o' if symbol == 'x' else 'x')
+      if -score > best:
+        best = -score
+        bestMove = move
+    return (best, bestMove)
+    
 
 class RandomPlayer(Player):
   def __init__(self, symbol):
