@@ -47,9 +47,9 @@ if __name__ == "__main__":
   rows = int(arguments["--rows"])
   cols = int(arguments["--cols"])
   p1t = arguments["-1"].capitalize()
-  p1d = arguments["--depth1"]
+  p1d = int(arguments["--depth1"])
   p2t = arguments["-2"].capitalize()
-  p2d = arguments["--depth2"]
+  p2d = int(arguments["--depth2"])
   gm = game_manager.GameManager(rows, cols
                                 , makePlayer(p1t, p1d, 'x')
                                 , makePlayer(p2t, p2d, 'o'))
