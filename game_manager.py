@@ -12,12 +12,14 @@ X_VICTORY = 3
 O_VICTORY = 4
 
 class GameManager:
-  def __init__(self, rows, cols, player1, player2):
+  def __init__(self, rows, cols, player1, player2, verbose=False):
     self.rows = rows
     self.cols = cols
     self.p1 = player1
     self.p2 = player2
     self.reset()
+    self.verbose = verbose
+    print verbose
 
   def reset(self):
     self.state = AWAITING_INITIAL_X
@@ -26,6 +28,8 @@ class GameManager:
   def play(self):
     while self.state is not X_VICTORY and self.state is not O_VICTORY:
       self._takeTurn()
+      if self.verbose:
+        game_rules.printBoard(self.board)
 
   def _takeTurn(self):
     playerBoard = deepcopy(self.board)

@@ -44,7 +44,6 @@ class MinimaxPlayer(Player):
     # TODO: write me
     pass
 
-
 class RandomPlayer(Player):
   def __init__(self, symbol):
     super(RandomPlayer, self).__init__(symbol)

@@ -5,7 +5,7 @@ Play a game of Konane between two players, either of whom can be 1) Human 2) Ran
 Requires python2.6+ or python3+
 
 Usage:
-  ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [--depth1=<p1depth>] [--depth2=<p2depth>] [-i <iter>]
+  ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [--depth1=<p1depth>] [--depth2=<p2depth>] [-i <iter>] [-v]
 
 Options:
   -1 <p1type>                      Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
@@ -16,6 +16,7 @@ Options:
   -h, --help                       Show this screen.
   -i <iter>, --iterations=<iter>   Sets the number of games to run.         [default: 1]
   -r <rows>, --rows=<rows>         Sets the number of rows on the board.    [default: 10]
+  -v, --verbose                    Verbose mode, prints the intermediate game states.
 """
 
 ###########################################################################
@@ -52,7 +53,8 @@ if __name__ == "__main__":
   p2d = int(arguments["--depth2"])
   gm = game_manager.GameManager(rows, cols
                                 , makePlayer(p1t, p1d, 'x')
-                                , makePlayer(p2t, p2d, 'o'))
+                                , makePlayer(p2t, p2d, 'o')
+                                , "--verbose" in arguments)
   # TODO: run the game for the appropriate number of iterations
   gm.reset()
   gm.play()
