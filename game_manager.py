@@ -19,7 +19,6 @@ class GameManager:
     self.p2 = player2
     self.reset()
     self.verbose = verbose
-    print verbose
 
   def reset(self):
     self.state = AWAITING_INITIAL_X
