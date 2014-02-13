@@ -52,7 +52,7 @@ class MinimaxPlayer(Player):
     return random.choice(list(validMoves))
 
   def getMove(self, board):
-    return self.negamax(board, self.depthLimit, self.symbol)
+    return self.negamax(board, self.depthLimit, self.symbol)[1]
 
   def negamax(self, board, depth, symbol):
     mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == symbol]
