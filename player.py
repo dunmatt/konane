@@ -28,9 +28,8 @@ class Player(object):
 
 
 class MinimaxPlayer(Player):
-  def __init__(self, symbol, depth):
+  def __init__(self, symbol):
     super(MinimaxPlayer, self).__init__(symbol)
-    self.depthLimit = depth
 
   def selectInitialX(self, board):
     return (0, 0)
