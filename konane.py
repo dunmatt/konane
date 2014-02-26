@@ -27,8 +27,10 @@ Options:
 
 from docopt import docopt
 from player import HumanPlayer, MinimaxPlayer, RandomPlayer
+from subprocess_player import ExternalPlayer
 
 import game_manager
+import os
 
 def makePlayer(playerType, symbol):
   if playerType[0] == 'H':
@@ -37,6 +39,8 @@ def makePlayer(playerType, symbol):
     return RandomPlayer(symbol)
   elif playerType[0] == 'M':
     return MinimaxPlayer(symbol)
+  elif os.file.exists(playerType):
+    return ExternalPlayer(playerType, symbol)
   else:
     print("Unrecognized playerType %s for player %s" % (playerType, symbol))
 
@@ -51,10 +55,10 @@ if __name__ == "__main__":
                                 , makePlayer(p1, 'x')
                                 , makePlayer(p2, 'o')
                                 , "--verbose" in arguments and arguments["--verbose"])
-  # TODO: run the game for the appropriate number of iterations
-  gm.reset()
-  gm.play()
-  if gm.state == game_manager.X_VICTORY:
-    print("X Wins!!")
-  if gm.state == game_manager.O_VICTORY:
-    print("O Wins!!")
+  for _ in range(int(arguments["--iterations"])):
+    gm.reset()
+    gm.play()
+    if gm.state == game_manager.X_VICTORY:
+      print("X Wins!!")
+    if gm.state == game_manager.O_VICTORY:
+      print("O Wins!!")
