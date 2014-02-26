@@ -68,9 +68,7 @@ class RandomPlayer(Player):
     return random.choice(list(validMoves))
 
   def getMove(self, board):
-    mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == self.symbol]
-    allMoves = [(o, d) for o in mine for d in game_rules.getEmptySquares(board)]
-    legalMoves = list(filter(lambda move: game_rules.isLegalMove(board, self.symbol, move, False), allMoves))
+    legalMoves = game_rules.getLegalMoves(board, self.symbol)
     if len(legalMoves) > 0:
       return random.choice(legalMoves)
     else:

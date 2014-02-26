@@ -132,8 +132,9 @@ def getFirstMovesForO(board):
   return getNeighbors(board, getEmptySquares(board).pop())
 
 def getLegalMoves(board, symbol):
-  # TODO: write me
-  pass
+  mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if pieceAt(board, (r, c)) == symbol]
+  allMoves = [(o, d) for o in mine for d in getEmptySquares(board)]
+  return [move for move in allMoves if isLegalMove(board, symbol, move, False)]
 
 def linearizeBoard(board):
   return "".join(["".join(board)])
