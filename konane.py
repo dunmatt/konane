@@ -5,7 +5,6 @@ Play a game of Konane between two players, either of whom can be 1) Human 2) Ran
 Requires python2.6+ or python3+
 
 Usage:
-<<<<<<< HEAD
   ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [-i <iter>] [-v] [-t <timeout>]
 
 Options:
@@ -17,20 +16,6 @@ Options:
   -r <rows>, --rows=<rows>           Sets the number of rows on the board.    [default: 10]
   -t <timeout>, --timeout=<timeout>  How many seconds does each player have to make a move?   [default: 60]
   -v, --verbose                      Verbose mode, prints the intermediate game states.
-=======
-  ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [--depth1=<p1depth>] [--depth2=<p2depth>] [-i <iter>] [-v]
-
-Options:
-  -1 <p1type>                      Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
-  -2 <p2type>                      Sets the player type for player 2.       [default: R]
-  -c <cols>, --cols=<cols>         Sets the number of columns on the board. [default: 10]
-  --depth1=<p1depth>               Sets the maximum depth for player 1.     [default: 4]
-  --depth2=<p2depth>               Sets the maximum depth for player 2.     [default: 4]
-  -h, --help                       Show this screen.
-  -i <iter>, --iterations=<iter>   Sets the number of games to run.         [default: 1]
-  -r <rows>, --rows=<rows>         Sets the number of rows on the board.    [default: 10]
-  -v, --verbose                    Verbose mode, prints the intermediate game states.
->>>>>>> added verbose mode
 """
 
 ###########################################################################
