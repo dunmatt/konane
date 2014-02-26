@@ -1,4 +1,17 @@
 #!/usr/bin/env python
+"""Tufts Comp 131 Stand Alone Konane Player
+
+Running this file directly computes a single turn for the specified player.
+
+Usage:
+  ./player.py (-p <player>) [-t <type>] (-r <rows>) (-c <cols>) <board>
+
+Options:
+  -p <player>     Which player (x or o) the player is playing for?
+  -t <type>       What player type for this player?  [default: M]
+  -r <rows>       Sets the number of rows of the board.
+  -c <cols>       Sets the number of columns of the board.
+"""
 
 import game_rules
 import random
@@ -94,3 +107,27 @@ class HumanPlayer(Player):
     origin = self._promptForPoint("Choose a piece to move for %s (in the format 'row column'): " % self.symbol.capitalize())
     destination = self._promptForPoint("Choose a destination for %s (%s, %s) -> " % (self.symbol.capitalize(), origin[0], origin[1]))
     return (origin, destination)
+
+
+def callMoveFunction(player, board):
+  if game_rules.isInitialMove(board):
+    if player.symbol == 'x':
+      return player.selectInitialX(board)
+    else:
+      return player.selectInitialO(board)
+  else:
+    return player.getMove(board)
+
+if __name__ == "__main__":
+  # parse the arguments
+  from docopt import docopt
+  args = docopt(__doc__, version="Konane Player v1.0")
+  # create a Player
+  from konane import makePlayer
+  player = makePlayer(args["-t"], args["-p"])
+  # create a board
+  rows = int(args["-r"])
+  cols = int(args["-c"])
+  board = game_rules.delinearizeBoard(args["<board>"], rows, cols)
+  # call the appropriate select move function
+  print(callMoveFunction(player, board))

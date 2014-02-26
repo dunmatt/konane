@@ -66,6 +66,12 @@ def isLegalMove(board, player, move, loud=True):
 def isLegalJump(board, player, other, jump):
   return pieceAt(board, jump[0]) == player and pieceAt(board, midPoint(jump)) == other and pieceAt(board, jump[1]) == " "
 
+def isInitialMove(board):
+  return countPieces(board, ' ') < 2
+
+def countPieces(board, piece):
+  return sum([sum([1 if c == piece else 0 for c in row]) for row in board])
+
 def interpolateMove(move):
   points = []
   if horizontalMove(move):
@@ -124,6 +130,15 @@ def getFirstMovesForX(board):
 
 def getFirstMovesForO(board):
   return getNeighbors(board, getEmptySquares(board).pop())
+
+def linearizeBoard(board):
+  return "".join(["".join(board)])
+
+def delinearizeBoard(rawBoard, rows, cols):
+  board = [rawBoard[i:i+cols] for i in range(0, len(rawBoard), cols)]
+  if len(board) != rows:
+    print("Problem parsing board!  Expected %s rows, got %s." % (rows, len(board)))
+  return board
 
 def printBoard(board):
   for row in board:
