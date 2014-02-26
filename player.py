@@ -54,14 +54,13 @@ class MinimaxPlayer(Player):
   def getMove(self, board):
     return self.negamax(board, self.depthLimit, self.symbol)[1]
 
-  def negamax(self, board, depth, symbol):
+  def _negamax(self, board, depth, symbol):
     mine = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if game_rules.pieceAt(board, (r, c)) == symbol]
     allMoves = [(o, d) for o in mine for d in game_rules.getEmptySquares(board)]
     legalMoves = list(filter(lambda move: game_rules.isLegalMove(board, symbol, move, False), allMoves))
     if depth == 0 or len(legalMoves) == 0:
-      h = 1  # TODO: write a heuristic and use it here
-      return (h if self.symbol == symbol else -h, board)
-    best = -1000000000  # TODO: figure out how python does neginf
+      return _assessBoard(board)
+    best = -1000000000
     bestMove = None
     for move in legalMoves:
       child = game_rules.makeMove(board, move)[0]
@@ -71,6 +70,9 @@ class MinimaxPlayer(Player):
         bestMove = move
     return (best, bestMove)
     
+  def _assessBoard(self, board):
+    return (1 if self.symbol == symbol else -1, board)  # TODO: write a better heuristic
+
 
 class RandomPlayer(Player):
   def __init__(self, symbol):
