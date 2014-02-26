@@ -131,6 +131,10 @@ def getFirstMovesForX(board):
 def getFirstMovesForO(board):
   return getNeighbors(board, getEmptySquares(board).pop())
 
+def getLegalMoves(board, symbol):
+  # TODO: write me
+  pass
+
 def linearizeBoard(board):
   return "".join(["".join(board)])
 
