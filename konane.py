@@ -11,8 +11,8 @@ Options:
   -1 <p1type>                      Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
   -2 <p2type>                      Sets the player type for player 2.       [default: R]
   -c <cols>, --cols=<cols>         Sets the number of columns on the board. [default: 10]
-  --depth1=<p1depth>               Sets the maximum depth for player 1.     [default: 4]
-  --depth2=<p2depth>               Sets the maximum depth for player 2.     [default: 4]
+  --depth1=<p1depth>               Sets the maximum depth for player 1.     [default: 3]
+  --depth2=<p2depth>               Sets the maximum depth for player 2.     [default: 3]
   -h, --help                       Show this screen.
   -i <iter>, --iterations=<iter>   Sets the number of games to run.         [default: 1]
   -r <rows>, --rows=<rows>         Sets the number of rows on the board.    [default: 10]
@@ -54,7 +54,7 @@ if __name__ == "__main__":
   gm = game_manager.GameManager(rows, cols
                                 , makePlayer(p1t, p1d, 'x')
                                 , makePlayer(p2t, p2d, 'o')
-                                , "--verbose" in arguments)
+                                , "--verbose" in arguments and arguments["--verbose"])
   # TODO: run the game for the appropriate number of iterations
   gm.reset()
   gm.play()

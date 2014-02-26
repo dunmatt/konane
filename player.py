@@ -33,8 +33,7 @@ class MinimaxPlayer(Player):
     self.depthLimit = depth
 
   def selectInitialX(self, board):
-    # TODO: write me
-    pass
+    return (0, 0)
 
   def selectInitialO(self, board):
     # TODO: write me
