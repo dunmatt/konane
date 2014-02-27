@@ -8,7 +8,7 @@ Usage:
 
 Options:
   -p <player>     Which player (x or o) the player is playing for?
-  -t <type>       What player type for this player?  [default: M]
+  -t <type>       What player type for this player?  [default: A]
   -r <rows>       Sets the number of rows of the board.
   -c <cols>       Sets the number of columns of the board.
 """
@@ -71,6 +71,20 @@ class MinimaxPlayer(Player):
     
   def _assessBoard(self, board, symbol):
     return (1 if self.symbol == symbol else -1, board)  # TODO: write a better heuristic
+
+
+class AlphaBetaPlayer(Player):
+  def __init__(self, symbol):
+    self.symbol = symbol  # 'x' or 'o'
+
+  def selectInitialX(self, board):
+    return (0, 0)
+
+  def selectInitialO(self, board):
+    pass
+
+  def getMove(self, board):
+    pass
 
 
 class RandomPlayer(Player):

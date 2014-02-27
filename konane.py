@@ -8,7 +8,7 @@ Usage:
   ./konane.py [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>] [-i <iter>] [-v] [-t <timeout>]
 
 Options:
-  -1 <p1type>                        Sets the player type ([H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
+  -1 <p1type>                        Sets the player type ([A]lpha-Beta, [H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
   -2 <p2type>                        Sets the player type for player 2.       [default: R]
   -c <cols>, --cols=<cols>           Sets the number of columns on the board. [default: 10]
   -h, --help                         Show this screen.
@@ -27,7 +27,7 @@ Options:
 ###########################################################################
 
 from docopt import docopt
-from player import HumanPlayer, MinimaxPlayer, RandomPlayer
+from player import AlphaBetaPlayer, HumanPlayer, MinimaxPlayer, RandomPlayer
 from subprocess_player import ExternalPlayer
 
 import game_manager
@@ -41,6 +41,8 @@ def makePlayer(playerType, symbol, timeout=0):
     return RandomPlayer(symbol)
   elif playerType[0] == 'M':
     return MinimaxPlayer(symbol)
+  elif playerType[0] == 'A':
+    return AlphaBetaPlayer(symbol)
   elif os.path.exists(playerType):
     return ExternalPlayer(playerType, symbol, timeout)
   else:
