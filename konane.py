@@ -32,6 +32,7 @@ from subprocess_player import ExternalPlayer
 
 import game_manager
 import os
+import signal
 
 def makePlayer(playerType, symbol, timeout=0):
   if playerType[0] == 'H':
@@ -40,7 +41,7 @@ def makePlayer(playerType, symbol, timeout=0):
     return RandomPlayer(symbol)
   elif playerType[0] == 'M':
     return MinimaxPlayer(symbol)
-  elif os.file.exists(playerType):
+  elif os.path.exists(playerType):
     return ExternalPlayer(playerType, symbol, timeout)
   else:
     print("Unrecognized playerType %s for player %s" % (playerType, symbol))
@@ -57,6 +58,9 @@ if __name__ == "__main__":
                                 , makePlayer(p1, 'x', timeout)
                                 , makePlayer(p2, 'o', timeout)
                                 , "--verbose" in arguments and arguments["--verbose"])
+  signal.signal(signal.SIGABRT, gm.interrupt)
+  signal.signal(signal.SIGINT, gm.interrupt)
+  signal.signal(signal.SIGQUIT, gm.interrupt)
   for _ in range(int(arguments["--iterations"])):
     gm.reset()
     gm.play()

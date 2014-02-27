@@ -24,6 +24,15 @@ class GameManager:
     self.state = AWAITING_INITIAL_X
     self.board = game_rules.makeBoard(self.rows, self.cols)
 
+  def interrupt(self, a, b):
+    from subprocess_player import ExternalPlayer
+    if self.p1.__class__ is ExternalPlayer:
+      self.p1.interrupt()
+    if self.p2.__class__ is ExternalPlayer:
+      self.p2.interrupt()
+    import sys
+    sys.exit(1)
+
   def play(self):
     while self.state is not X_VICTORY and self.state is not O_VICTORY:
       self._takeTurn()

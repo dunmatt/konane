@@ -2,9 +2,9 @@
 """
 """
 
-from game_rules import linearizeBoard
+from game_rules import linearizeBoard, getLegalMoves
 from player import Player
-from subprocess import Popen
+from subprocess import Popen, PIPE
 from tempfile import TemporaryFile
 from threading import Timer
 
@@ -14,51 +14,61 @@ class ExternalPlayer(Player):
   def __init__(self, executable, symbol, timeout):
     super(ExternalPlayer, self).__init__(symbol)
     self.executable = executable
+    self.process = None
     self.timeout = timeout
+    self.timer = None
+
+  def interrupt(self):
+    if self.process:
+      print("Got SIGINT, killing child (process).")
+      try:
+        self.process.kill()
+      except:
+        pass
+    if self.timer:
+      self.timer.cancel()
 
   def selectInitialX(self, board):
-    return _sanitizedMove(board)
+    return self._sanitizedMove(board)
 
   def selectInitialO(self, board):
-    return _sanitizedMove(board)
+    return self._sanitizedMove(board)
 
   def getMove(self, board):
-    return _sanitizedMove(board)
+    return self._sanitizedMove(board)
 
-  def _sanitizedMove(board):
-    legalMoves = game_rules.getLegalMoves(board, self.symbol)
-    resultMove = _parseMove(_run(board))
+  def _sanitizedMove(self, board):
+    legalMoves = getLegalMoves(board, self.symbol)
+    resultMove = self._parseMove(self._run(board))
     if resultMove in legalMoves:
       return resultMove
     else:
       return ((1, 2), (3, 4))
 
-  def _run(board):
-    tempOut = TemporaryFile(mode="w+")
-    process = Popen([self.executable, "-p", self.symbol, "-r", len(board), "-c", len(board[0]), linearizeBoard(board)]
-                    , stdout=tempOut)
+  def _run(self, board):
+    self.process = Popen([self.executable, "-p", self.symbol, "-r", str(len(board)), "-c", str(len(board[0])), linearizeBoard(board)]
+                         , stdout=PIPE)
     def killProcess():
-      if process.poll() == None:
+      if self.process.poll() == None:
         try:
-          process.kill()
-          print('Error: process taking too long to complete--terminating')
+          self.process.kill()
+          print('Error: player %s taking too long to complete--terminating' % self.symbol)
         except:
-          pass  # if the process exits between the poll and the kill, that's fine, do nothing
-    timer = Timer(self.timeout, killProcess)
-    timer.start()
-    process.wait()
-    timer.cancel()
-    tempOut.seek(0)
-    return tempOut.read()
+          pass  # if the self.process exits between the poll and the kill, that's fine, do nothing
+    self.timer = Timer(self.timeout, killProcess)
+    self.timer.start()
+    self.process.wait()
+    self.timer.cancel()
+    return self.process.stdout.read()
 
-  def _parseMove(move):
-    return _parseInitialMove(move) or _parseSubsequentMove(move)
+  def _parseMove(self, move):
+    return self._parseInitialMove(move) or self._parseSubsequentMove(move)
 
-  def _parseInitialMove(move):
+  def _parseInitialMove(self, move):
     match = re.match(r"^\((\d+), (\d+)\)$", move)
     return (int(match.group(1)), int(match.group(2))) if match else None
 
-  def _parseSubsequentMove(move):
+  def _parseSubsequentMove(self, move):
     match = re.match(r"^\(\((\d+), (\d+)\), \((\d+), (\d+)\)\)$", move)
     return ((int(match.group(1)), int(match.group(2)))
             , (int(match.group(3)), int(match.group(4)))) if match else None
