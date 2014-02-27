@@ -9,7 +9,7 @@ Usage:
 
 Options:
   -1 <p1type>                        Sets the player type ([A]lpha-Beta, [H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
-  -2 <p2type>                        Sets the player type for player 2.       [default: R]
+  -2 <p2type>                        Sets the player type for player 2 (note: program names can also be specified as player types).       [default: R]
   -c <cols>, --cols=<cols>           Sets the number of columns on the board. [default: 10]
   -h, --help                         Show this screen.
   -i <iter>, --iterations=<iter>     Sets the number of games to run.         [default: 1]
