@@ -78,12 +78,15 @@ class AlphaBetaPlayer(Player):
     self.symbol = symbol  # 'x' or 'o'
 
   def selectInitialX(self, board):
+    # TODO: rewrite me... or don't
     return (0, 0)
 
   def selectInitialO(self, board):
+    # TODO: write me
     pass
 
   def getMove(self, board):
+    # TODO: write me
     pass
 
 
