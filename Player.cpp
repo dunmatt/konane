@@ -203,7 +203,7 @@ void Player::findMoves( Board theBoard, char piece ) {
 /* Make an initial move for the first player by removing a piece from a full board.
  * The piece removed can be either a corner piece or a center piece.
  */
-void Player::firstMove( Board &theBoard )
+void Player::firstMove( Board &theBoard, bool shouldPrintMove )
 {
 	int width = theBoard.getRows();
 	int length = theBoard.getCols();
@@ -285,12 +285,15 @@ void Player::firstMove( Board &theBoard )
 			else { cout << "Please enter c or m" << endl; }
 		} while ( (reply != 'c') && (reply != 'm') );
 	}
+	if (shouldPrintMove) {
+		cout << "(" << firstMove.row-1 << ", " << firstMove.col-1 << ")";
+	}
 }
 
 /* Make an initial move for the second player by removing a piece adjacent
  * to the piece removed by the first player.
  */
-bool Player::secondMove( Board &theBoard ) {
+bool Player::secondMove( Board &theBoard, bool shouldPrintMove ) {
 	int width = theBoard.getRows();
 	int length = theBoard.getCols();
 	Position firstMove;
@@ -455,6 +458,9 @@ bool Player::secondMove( Board &theBoard ) {
 		secondMove.col = col;
 		theBoard.setSecondMove( secondMove );
 	}
+	if (shouldPrintMove) {
+		cout << "(" << secondMove.row-1 << ", " << secondMove.col-1 << ")";
+	}
 	return false;
 }
 
@@ -465,7 +471,7 @@ bool Player::secondMove( Board &theBoard ) {
  *    checked for legality.
  * The return value is "true" if there are no legal moves.
  */
-bool Player::nextMove( Board &theBoard, char mode ) {
+bool Player::nextMove( Board &theBoard, char mode, bool shouldPrintMove ) {
 	bool gameOver;
 	bool illegalMove;
 	int numMoves;
@@ -473,7 +479,7 @@ bool Player::nextMove( Board &theBoard, char mode ) {
 	int length = theBoard.getCols();
 	int row1, col1, row2, col2;
 	char piece;
-	Move m, bestMove;
+	Move bestMove;
 	std::vector< Move > Actions;
 	int bestValue;
 	
@@ -518,25 +524,29 @@ bool Player::nextMove( Board &theBoard, char mode ) {
 				illegalMove = true;
 			}
 			else {
-				m.from.row = row1;
-				m.from.col = col1;
-				piece = theBoard.getPiece( m.from );
+				bestMove.from.row = row1;
+				bestMove.from.col = col1;
+				piece = theBoard.getPiece( bestMove.from );
 				if (piece != myPiece) {
 					cout << "You must pick one of your pieces" << endl;
 					illegalMove = true;
 				}
 				else {
-					m.to.row = row2;
-					m.to.col = col2;
-					if (!checkLegalMove( theBoard, m, myPiece)) {
+					bestMove.to.row = row2;
+					bestMove.to.col = col2;
+					if (!checkLegalMove( theBoard, bestMove, myPiece)) {
 						illegalMove = true;
 					}
 					else {
-						theBoard.makeMove( m );
+						theBoard.makeMove( bestMove );
 					}
 				}
 			}
 		} while (illegalMove);
+	}
+	if (shouldPrintMove) {
+		cout << "((" << bestMove.from.row-1 << ", " << bestMove.from.col-1
+         << "), (" << bestMove.to.row-1 << ", " << bestMove.to.col-1 << "))";
 	}
 	return gameOver;
 }

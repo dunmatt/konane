@@ -34,6 +34,7 @@ int main (int argc, char * const argv[]) {
 	unsigned depth1 = 4;
 	unsigned depth2 = 4;
 	bool gameOver;
+	char* rawBoard = NULL;
 	
 	if (argc == 1) {
 		do {
@@ -89,7 +90,10 @@ int main (int argc, char * const argv[]) {
 	}
 	else {
 		for (int i=1; i<argc; i++) {
-			if (argv[i][0] != '-') {
+			if (argv[i][0] != '-'
+			    && argv[i][0] != ' '
+			    && argv[i][0] != 'x'
+			    && argv[i][0] != 'o') {
 				cout << "Invalid option: " << argv[i] << endl;
 			}
 			else if ((argv[i][1] == 'r') || (argv[i][1] == 'R')) {
@@ -100,8 +104,8 @@ int main (int argc, char * const argv[]) {
 				argv[i][0] = ' '; argv[i][1] = ' ';
 				cols = atoi(argv[i]);
 			}
-			else if (argv[i][1] == '1') {
-				if ((argv[i][2] == 'h') || (argv[i][2] == 'h')) {
+			else if (argv[i][1] == '1' || argv[i][1] == 't') {
+				if ((argv[i][2] == 'h') || (argv[i][2] == 'H')) {
 					playerType1 = 'h';
 				}
 				else if ((argv[i][2] == 'r') || (argv[i][2] == 'R')) {
@@ -140,31 +144,49 @@ int main (int argc, char * const argv[]) {
 				cout << "Defaults: -r10 -c10 -1r -2r" << endl;
 				return 0;
 			}
+			else if (argv[i][1] == 'p') {
+				playerPiece1 = argv[i][2];
+			}
+			else if (argv[i][0] == ' ' || argv[i][0] == 'x' || argv[i][0] == 'o') {
+				rawBoard = argv[i];
+			}
 		}
 	}
-	Board myBoard( rows, cols );
-	Player player1( playerType1, playerPiece1, depth1 );
-	if (playerPiece1 == 'x') { playerPiece2 = 'o'; }
-	else { playerPiece2 = 'x'; }
-	Player player2( playerType2, playerPiece2, depth2 );
-	player1.firstMove( myBoard );
-	if (mode == 'v') { myBoard.printBoard( cout ); };
-	gameOver = player2.secondMove( myBoard );
-	if (mode == 'v') { myBoard.printBoard( cout ); };
-	while (!gameOver) {
-		gameOver = player1.nextMove( myBoard, mode );
-		if (gameOver) {
-			cout << "Player 2 wins." << endl;
-			return 0;
-		}
+	if (rawBoard == NULL) {
+		Board myBoard( rows, cols );
+		Player player1( playerType1, playerPiece1, depth1 );
+		if (playerPiece1 == 'x') { playerPiece2 = 'o'; }
+		else { playerPiece2 = 'x'; }
+		Player player2( playerType2, playerPiece2, depth2 );
+		player1.firstMove( myBoard );
 		if (mode == 'v') { myBoard.printBoard( cout ); };
-		if (!gameOver) {
-			gameOver = player2.nextMove( myBoard, mode );
+		gameOver = player2.secondMove( myBoard );
+		if (mode == 'v') { myBoard.printBoard( cout ); };
+		while (!gameOver) {
+			gameOver = player1.nextMove( myBoard, mode );
 			if (gameOver) {
-				cout << "Player 1 wins." << endl;
+				cout << "Player 2 wins." << endl;
 				return 0;
 			}
 			if (mode == 'v') { myBoard.printBoard( cout ); };
+			if (!gameOver) {
+				gameOver = player2.nextMove( myBoard, mode );
+				if (gameOver) {
+					cout << "Player 1 wins." << endl;
+					return 0;
+				}
+				if (mode == 'v') { myBoard.printBoard( cout ); };
+			}
+		}
+	} else {
+		Board board(rows, cols, rawBoard);
+		Player player(playerType1, playerPiece1, depth1);
+		if (board.getBlanks() == 0) {
+			player.firstMove(board, true);
+		} else if (board.getBlanks() == 1) {
+			player.secondMove(board, true);
+		} else {
+			player.nextMove(board, 's', true);
 		}
 	}
     return 0;

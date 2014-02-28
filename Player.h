@@ -39,9 +39,9 @@ Player();
 
 Player( char ptype, char piece, unsigned searchDepth );
 
-void firstMove( Board & );
-bool secondMove( Board & );
-bool nextMove( Board &, char mode );
+void firstMove( Board &, bool shouldPrintMove=false);
+bool secondMove( Board &, bool shouldPrintMove=false);
+bool nextMove( Board &, char mode, bool shouldPrintMove=false);
 
 private:
 

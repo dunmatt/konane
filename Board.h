@@ -67,8 +67,8 @@ class Board
 public:
 
 Board();
-
 Board( unsigned rows, unsigned cols );
+Board(unsigned rows, unsigned cols, char* const raw);
 
 void printBoard( ostream & out ) const;
 void setRows( int rows );
@@ -84,10 +84,12 @@ void getFirstMove( Position & ) const;
 bool isCorner( Position p );
 bool isNextToCorner( Position p );
 bool isCenter( Position p );
+unsigned getBlanks() const;
 
 private:
-
+void populateVectors();
 char boardArray[MAX_ROWS+1][MAX_COLS+1];
+unsigned blanks;
 unsigned boardRows, boardCols;
 Position firstMove;
 Position secondMove;

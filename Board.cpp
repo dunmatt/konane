@@ -16,13 +16,26 @@ Board::Board()
 {
 }
 
+Board::Board(unsigned rows, unsigned cols, char* const raw) {
+	boardRows = rows;
+	boardCols = cols;
+	blanks = 0;
+	for (int r = 0; r < rows; r++) {
+		for (int c = 0; c < cols; c++) {
+			boardArray[r+1][c+1] = raw[r * cols + c];
+			if (boardArray[r+1][c+1] == ' ') {
+				blanks++;
+			}
+		}
+	}
+	populateVectors();
+}
+
 /* Set the actual size of the board and fill it with
  * alternating x and o chars
  */
 Board::Board( unsigned rows, unsigned cols )
 {
-	Position p;
-	
 	boardRows = rows;
 	boardCols = cols;
 	for (int r=1; r<=boardRows; r++) {
@@ -32,6 +45,11 @@ Board::Board( unsigned rows, unsigned cols )
 			else boardArray[r][c] = 'o';
 		}
 	}
+	populateVectors();
+}
+
+void Board::populateVectors() {
+	Position p;
 	if (boardRows == 1) {
 		p.row = 1; p.col = 1;
 		boardCorners.push_back( p );
@@ -127,6 +145,11 @@ Board::Board( unsigned rows, unsigned cols )
 		}
 	}
 }
+
+unsigned Board::getBlanks() const {
+	return blanks;
+}
+
 
 /* Print the current board to an output stream
  * Mark the most recent move by an underscore for
