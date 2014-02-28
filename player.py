@@ -58,7 +58,7 @@ class MinimaxPlayer(Player):
   def _negamax(self, board, depth, symbol):
     legalMoves = game_rules.getLegalMoves(board, symbol)
     if depth == 0 or len(legalMoves) == 0:
-      return self._assessBoard(board, symbol)
+      return (self._assessBoard(board, symbol), None)
     best = -1000000000
     bestMove = None
     for move in legalMoves:
