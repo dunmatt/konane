@@ -139,6 +139,21 @@ class HumanPlayer(Player):
     return (origin, destination)
 
 
+def makePlayer(playerType, symbol, timeout=0):
+  from subprocess_player import ExternalPlayer
+  if playerType[0] == 'H':
+    return HumanPlayer(symbol)
+  elif playerType[0] == 'R':
+    return RandomPlayer(symbol)
+  elif playerType[0] == 'M':
+    return MinimaxPlayer(symbol)
+  elif playerType[0] == 'A':
+    return AlphaBetaPlayer(symbol)
+  elif os.path.exists(playerType):
+    return ExternalPlayer(playerType, symbol, timeout)
+  else:
+    print("Unrecognized playerType %s for player %s" % (playerType, symbol))
+
 def callMoveFunction(player, board):
   if game_rules.isInitialMove(board):
     if player.symbol == 'x':

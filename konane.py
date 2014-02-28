@@ -27,26 +27,11 @@ Options:
 ###########################################################################
 
 from docopt import docopt
-from player import AlphaBetaPlayer, HumanPlayer, MinimaxPlayer, RandomPlayer
-from subprocess_player import ExternalPlayer
+from player import makePlayer
 
 import game_manager
 import os
 import signal
-
-def makePlayer(playerType, symbol, timeout=0):
-  if playerType[0] == 'H':
-    return HumanPlayer(symbol)
-  elif playerType[0] == 'R':
-    return RandomPlayer(symbol)
-  elif playerType[0] == 'M':
-    return MinimaxPlayer(symbol)
-  elif playerType[0] == 'A':
-    return AlphaBetaPlayer(symbol)
-  elif os.path.exists(playerType):
-    return ExternalPlayer(playerType, symbol, timeout)
-  else:
-    print("Unrecognized playerType %s for player %s" % (playerType, symbol))
 
 if __name__ == "__main__":
   arguments = docopt(__doc__, version="Konane v1.0")
