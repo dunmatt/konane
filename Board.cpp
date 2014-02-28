@@ -28,6 +28,17 @@ Board::Board(unsigned rows, unsigned cols, char* const raw) {
 			}
 		}
 	}
+	// HACK: I shouldn't have to do this
+	if (blanks == 1) {
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+				if (boardArray[r+1][c+1] == ' ') {
+					firstMove.row = r+1;
+					firstMove.col = r+1;
+				}
+			}
+		}		
+	}
 	populateVectors();
 }
 

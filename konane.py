@@ -30,7 +30,6 @@ from docopt import docopt
 from player import makePlayer
 
 import game_manager
-import os
 import signal
 
 if __name__ == "__main__":

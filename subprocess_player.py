@@ -46,7 +46,7 @@ class ExternalPlayer(Player):
       return ((1, 2), (3, 4))
 
   def _run(self, board):
-    self.process = Popen([self.executable, "-p", self.symbol, "-r", str(len(board)), "-c", str(len(board[0])), linearizeBoard(board)]
+    self.process = Popen([self.executable, "-p"+ self.symbol, "-r"+ str(len(board)), "-c"+ str(len(board[0])), linearizeBoard(board)]
                          , stdout=PIPE)
     def killProcess():
       if self.process.poll() == None:
@@ -59,7 +59,9 @@ class ExternalPlayer(Player):
     self.timer.start()
     self.process.wait()
     self.timer.cancel()
-    return self.process.stdout.read()
+    out = self.process.stdout.read()
+    print(out)
+    return out
 
   def _parseMove(self, move):
     return self._parseInitialMove(move) or self._parseSubsequentMove(move)

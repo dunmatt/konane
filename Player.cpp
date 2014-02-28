@@ -307,8 +307,9 @@ bool Player::secondMove( Board &theBoard, bool shouldPrintMove ) {
 	int rowdiff, coldiff;
 	char piece;
 	bool illegalMove;
-	
+
 	theBoard.getFirstMove( firstMove );
+	// cout << firstMove.row-1 << " " << firstMove.col-1;
 	if ((myType == 'r') || (myType == 'm')) {
 		if (oddwidth && oddlength) {
 			center.row = (1+width)/2;
@@ -490,6 +491,7 @@ bool Player::nextMove( Board &theBoard, char mode, bool shouldPrintMove ) {
 		if (mode == 'v') { cout << numMoves << " legal moves for " << myPiece << endl; };
 		if (numMoves == 0) { return true; };
 		int i = rand()%numMoves;
+		bestMove = legalMoves[i];
 		theBoard.makeMove( legalMoves[i] );
 		legalMoves.clear();
 	}

@@ -8,7 +8,7 @@ Usage:
 
 Options:
   -p <player>     Which player (x or o) the player is playing for?
-  -t <type>       What player type for this player?  [default: A]
+  -t <type>       What player type for this player?  [default: R]
   -r <rows>       Sets the number of rows of the board.
   -c <cols>       Sets the number of columns of the board.
 """
@@ -140,6 +140,7 @@ class HumanPlayer(Player):
 
 
 def makePlayer(playerType, symbol, timeout=0):
+  import os
   from subprocess_player import ExternalPlayer
   if playerType[0] == 'H':
     return HumanPlayer(symbol)
