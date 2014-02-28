@@ -59,15 +59,12 @@ class MinimaxPlayer(Player):
     legalMoves = game_rules.getLegalMoves(board, symbol)
     if depth == 0 or len(legalMoves) == 0:
       return (self._assessBoard(board, symbol), None)
-    best = -1000000000
-    bestMove = None
+    best = (-1000000000, None)
     for move in legalMoves:
       child = game_rules.makeMove(board, move)[0]
-      (score, choice) = self._negamax(child, depth-1, 'o' if symbol == 'x' else 'x')
-      if -score > best:
-        best = -score
-        bestMove = move
-    return (best, bestMove)
+      (score, _) = self._negamax(child, depth-1, 'o' if symbol == 'x' else 'x')
+      best = max(best, (-score, move))
+    return best
     
   def _assessBoard(self, board, symbol):
     return (1 if self.symbol == symbol else -1, board)  # TODO: write a better heuristic
