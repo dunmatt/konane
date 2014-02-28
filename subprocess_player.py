@@ -61,7 +61,7 @@ class ExternalPlayer(Player):
     self.process.wait()
     self.timer.cancel()
     out = self.process.stdout.read()
-    print(out)
+    # print(out)
     return out
 
   def _parseMove(self, move):
