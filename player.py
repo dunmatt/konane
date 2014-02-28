@@ -61,7 +61,7 @@ class MinimaxPlayer(Player):
       return (self._assessBoard(board, symbol), None)
     best = (-1000000000, None)
     for move in legalMoves:
-      child = game_rules.makeMove(board, move)[0]
+      child = game_rules.makeMove(board, move)
       (score, _) = self._negamax(child, depth-1, 'o' if symbol == 'x' else 'x')
       best = max(best, (-score, move))
     return best

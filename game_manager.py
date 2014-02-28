@@ -68,12 +68,16 @@ class GameManager:
 
   def _handleTurnX(self, playerBoard, board):
     self.state = O_TURN
-    (self.board, legal) = game_rules.makePlayerMove(board, 'x', self.p1.getMove(playerBoard))
-    if not legal:
+    move = self.p1.getMove(playerBoard)
+    if game_rules.isLegalMove(board, 'x', move, False):
+      self.board = game_rules.makeMove(board, move)
+    else:
       self.state = O_VICTORY
 
   def _handleTurnO(self, playerBoard, board):
     self.state = X_TURN
-    (self.board, legal) = game_rules.makePlayerMove(board, 'o', self.p2.getMove(playerBoard))
-    if not legal:
+    move = self.p2.getMove(playerBoard)
+    if game_rules.isLegalMove(board, 'o', move, False):
+      self.board = game_rules.makeMove(board, move)
+    else:
       self.state = X_VICTORY

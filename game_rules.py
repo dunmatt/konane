@@ -22,9 +22,9 @@ def makePlayerMove(board, player, move):
     newBoard = deepcopy(board)
     for jump in interpolateMove(move):
       _makeJump(newBoard, jump)
-    return (newBoard, True)
+    return newBoard
   else:
-    return (board, False)
+    return board
 
 def _makeJump(board, jump):
   mid = midPoint(jump)
