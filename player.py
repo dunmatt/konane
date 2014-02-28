@@ -142,15 +142,15 @@ class HumanPlayer(Player):
 def makePlayer(playerType, symbol, timeout=0):
   import os
   from subprocess_player import ExternalPlayer
-  if playerType[0] == 'H':
+  if playerType[0] == 'H' or playerType[0] == 'h':
     return HumanPlayer(symbol)
-  elif playerType[0] == 'R':
+  elif playerType[0] == 'R' or playerType[0] == 'r':
     return RandomPlayer(symbol)
-  elif playerType[0] == 'M':
+  elif playerType[0] == 'M' or playerType[0] == 'm':
     return MinimaxPlayer(symbol)
-  elif playerType[0] == 'A':
+  elif playerType[0] == 'A' or playerType[0] == 'a':
     return AlphaBetaPlayer(symbol)
-  elif os.path.exists(playerType):
+  elif os.path.exists(playerType[:-1]):
     return ExternalPlayer(playerType, symbol, timeout)
   else:
     print("Unrecognized playerType %s for player %s" % (playerType, symbol))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-""" Tufts Comp 131 Konane Skeleton
+"""Tufts Comp 131 Konane Skeleton
 
-Play a game of Konane between two players, either of whom can be 1) Human 2) Random or 3) A Minimax AI of your construction!
+Play a game of Konane between two players.
 Requires python2.6+ or python3+
 
 Usage:
@@ -9,7 +9,7 @@ Usage:
 
 Options:
   -1 <p1type>                        Sets the player type ([A]lpha-Beta, [H]uman, [R]andom, or [M]inimax) for player 1.  [default: R]
-  -2 <p2type>                        Sets the player type for player 2 (note: program names can also be specified as player types).       [default: R]
+  -2 <p2type>                        Sets the player type for player 2 (note: program names suffixed with a player type character can also be specified as player types).       [default: R]
   -c <cols>, --cols=<cols>           Sets the number of columns on the board. [default: 10]
   -h, --help                         Show this screen.
   -i <iter>, --iterations=<iter>     Sets the number of games to run.         [default: 1]

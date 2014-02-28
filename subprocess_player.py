@@ -13,7 +13,8 @@ import re
 class ExternalPlayer(Player):
   def __init__(self, executable, symbol, timeout):
     super(ExternalPlayer, self).__init__(symbol)
-    self.executable = executable
+    self.executable = executable[:-1]
+    self.playerType = executable[-1]
     self.process = None
     self.timeout = timeout
     self.timer = None
@@ -46,7 +47,7 @@ class ExternalPlayer(Player):
       return ((1, 2), (3, 4))
 
   def _run(self, board):
-    self.process = Popen([self.executable, "-p"+ self.symbol, "-r"+ str(len(board)), "-c"+ str(len(board[0])), linearizeBoard(board)]
+    self.process = Popen([self.executable, "-p"+ self.symbol, "-t"+ self.playerType, "-r"+ str(len(board)), "-c"+ str(len(board[0])), linearizeBoard(board)]
                          , stdout=PIPE)
     def killProcess():
       if self.process.poll() == None:
