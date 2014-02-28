@@ -9,3 +9,6 @@ Player.o: Player.h Board.h Player.cpp
 
 main.o: Board.h Player.h main.cpp
 	g++ -c main.cpp
+
+clean:
+	rm *.o *.pyc konane
