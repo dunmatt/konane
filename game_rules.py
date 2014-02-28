@@ -60,6 +60,8 @@ def isLegalMove(board, player, move, loud=True):
       if loud:
         print("Illegal move")
       return False
+    board = deepcopy(board)
+    _makeJump(board, jump)
     hasJumped = True
   return hasJumped
 
