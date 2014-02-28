@@ -72,7 +72,7 @@ class MinimaxPlayer(Player):
 
 class AlphaBetaPlayer(Player):
   def __init__(self, symbol):
-    self.symbol = symbol  # 'x' or 'o'
+    super(AlphaBetaPlayer, self).__init__(symbol)
 
   def selectInitialX(self, board):
     # TODO: rewrite me... or don't
