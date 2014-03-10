@@ -53,7 +53,12 @@ class MinimaxPlayer(Player):
     return random.choice(list(validMoves))
 
   def getMove(self, board):
+    #  This is how I would do the assignment, however Anselm asked me to
+    #  make it look like the pseudocode in the book...
     return self._negamax(board, self.depthLimit, self.symbol)[1]
+    # ... so if you care about it looking like the book, comment out the
+    # above line and uncomment the next one.
+    # return self._minimaxDecision(board, self.symbol)
 
   def _negamax(self, board, depth, symbol):
     legalMoves = game_rules.getLegalMoves(board, symbol)
@@ -68,6 +73,32 @@ class MinimaxPlayer(Player):
     
   def _assessBoard(self, board, symbol):
     return (1 if self.symbol == symbol else -1, board)  # TODO: write a better heuristic
+
+  def _minimaxDecision(self, board, symbol):
+    return self._maxValue(board, self.depthLimit, symbol)[1]
+
+  def _maxValue(self, board, depth, symbol):
+    legalMoves = game_rules.getLegalMoves(board, symbol)
+    if depth == 0 or len(legalMoves) == 0:
+      return (self._assessBoard(board, symbol), None)
+    best = (-1000000000, None)
+    for move in legalMoves:
+      child = game_rules.makeMove(board, move)
+      (score, _) = self._minValue(child, depth-1, 'o' if symbol == 'x' else 'x')
+      best = max(best, (score, move))
+    return best
+
+  def _minValue(self, board, depth, symbol):
+    legalMoves = game_rules.getLegalMoves(board, symbol)
+    if depth == 0 or len(legalMoves) == 0:
+      return (self._assessBoard(board, symbol), None)
+    best = (1000000000, None)
+    for move in legalMoves:
+      child = game_rules.makeMove(board, move)
+      (score, _) = self._minValue(child, depth-1, 'o' if symbol == 'x' else 'x')
+      best = min(best, (score, move))
+    return best
+
 
 
 class AlphaBetaPlayer(Player):
