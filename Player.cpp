@@ -200,6 +200,75 @@ void Player::findMoves( Board theBoard, char piece ) {
 	}
 }
 
+/* MinValue and MaxValue implement a minimax player with maximum
+ * search depth specified by "maxDepth".  The heuristic for evaluating
+ * board positions is the number of legal moves (numMoves) minus the
+ * number of legal moves for the opponent (numOppMoves).
+ */
+int Player::MinValue( unsigned depth, unsigned maxDepth, Board b, Move m ) {
+	Board newBoard = b;
+	int width = newBoard.getRows();
+	int length = newBoard.getCols();
+	int value = (width * length * width * length);  // upper bound on number of legal moves
+	char opponent;
+	
+	newBoard.makeMove( m );
+	findMoves( newBoard, myPiece );
+	int numMoves = legalMoves.size();
+	legalMoves.clear();
+	if (myPiece == 'x') { opponent = 'o'; }
+	else { opponent = 'x'; };
+	findMoves( newBoard, opponent );
+	int numOppMoves = legalMoves.size();
+	if (numOppMoves == 0) { return value; };  // game over, so return upper bound
+	if (depth == maxDepth) {
+		legalMoves.clear();
+		return ( numMoves - numOppMoves );  // maxDepth, so return heuristic
+	};
+	if (numOppMoves == 1) {  // opponent has no choice
+		legalMoves.clear();
+		return MaxValue( depth+1, maxDepth, newBoard, legalMoves[0] );
+	};	
+	for (int i=0; i<numOppMoves; i++) {  // minimize the possibilities for Max
+		int tempValue = MaxValue( depth+1, maxDepth, newBoard, legalMoves[i] );
+		if (tempValue < value) { value = tempValue; };
+	}
+	legalMoves.clear();
+	return value;
+}
+
+int Player::MaxValue( unsigned depth, unsigned maxDepth, Board b, Move m ) {
+	Board newBoard = b;
+	int width = newBoard.getRows();
+	int length = newBoard.getCols();
+	int value = -(width * length * width * length);  // negative of upper bound on number of legal moves
+	char opponent;
+	
+	newBoard.makeMove( m );
+	if (myPiece == 'x') { opponent = 'o'; }
+	else { opponent = 'x'; };
+	findMoves( newBoard, opponent );
+	int numOppMoves = legalMoves.size();
+	legalMoves.clear();
+	findMoves( newBoard, myPiece );
+	int numMoves = legalMoves.size();
+	if (numMoves == 0) { return value; };  // game over, so return lower bound
+	if (depth == maxDepth) {
+		legalMoves.clear();
+		return ( numMoves - numOppMoves );  // maxDepth, so return heuristic
+	};
+	if (numMoves == 1) {  // opponent has no choice
+		legalMoves.clear();
+		return MinValue( depth+1, maxDepth, newBoard, legalMoves[0] );
+	};	
+	for (int i=0; i<numMoves; i++) {  // maximize the possibilities for Min
+		int tempValue = MinValue( depth+1, maxDepth, newBoard, legalMoves[i] );
+		if (tempValue > value) { value = tempValue; };
+	}
+	legalMoves.clear();
+	return value;
+}
+
 /* Make an initial move for the first player by removing a piece from a full board.
  * The piece removed can be either a corner piece or a center piece.
  */
@@ -220,7 +289,7 @@ void Player::firstMove( Board &theBoard, bool shouldPrintMove )
 	corner2 = theBoard.getPiece( p );
 	p.row = 1; p.col = length;
 	corner3 = theBoard.getPiece( p );	
-	if ((myType == 'r') || (myType == 'm')) {
+	if ((myType == 'r') || (myType == 'm') || (myType == 'a')) {
 		if (oddwidth && oddlength && (corner1 != myPiece) ) {
 			if (length == 1) {
 				firstMove.row = 2;
@@ -310,7 +379,7 @@ bool Player::secondMove( Board &theBoard, bool shouldPrintMove ) {
 
 	theBoard.getFirstMove( firstMove );
 	// cout << firstMove.row-1 << " " << firstMove.col-1;
-	if ((myType == 'r') || (myType == 'm')) {
+	if ((myType == 'r') || (myType == 'm') || (myType == 'a')) {
 		if (oddwidth && oddlength) {
 			center.row = (1+width)/2;
 			center.col = (1+length)/2;
@@ -468,6 +537,7 @@ bool Player::secondMove( Board &theBoard, bool shouldPrintMove ) {
 /* Make a move for either player.
  * If the player type is 'r' (random), a random legal move is selected.
  * If the player type is 'm' (minimax), a minimax optimal move is selected.
+ * If the player type is 'a' (alpha-beta), an alpha-beta optimal move is selected.
  * If the player type is 'h', a move is requested from the human and
  *    checked for legality.
  * The return value is "true" if there are no legal moves.
@@ -504,7 +574,31 @@ bool Player::nextMove( Board &theBoard, char mode, bool shouldPrintMove ) {
 			bestMove = legalMoves[0];
 		}
 		else {
-			/* Your minimax code goes here */
+			bestValue = -(width * length * width * length + 1);
+			Actions = legalMoves;
+			for (int i=0; i<numMoves; i++) {
+				int newValue = MinValue( 0, myDepth, theBoard, Actions[i] );
+				if ( newValue > bestValue) {
+					bestValue = newValue;
+					bestMove = Actions[i];
+				}
+			}
+		}
+		theBoard.makeMove( bestMove );
+		legalMoves.clear();
+	}
+	else if (myType == 'a') {
+		findMoves( theBoard, myPiece );
+		numMoves = legalMoves.size();
+		if (mode == 'v') { cout << numMoves << " legal moves for " << myPiece << endl; };
+		if (numMoves == 0) { return true; };
+		if (numMoves == 1) {
+			bestMove = legalMoves[0];
+		}
+		else {
+			int alpha = -(width * length * width * length + 1);
+			int beta = (width * length * width * length + 1);
+			// You need to call alpha-beta here
 		}
 		theBoard.makeMove( bestMove );
 		legalMoves.clear();

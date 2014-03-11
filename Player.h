@@ -48,6 +48,8 @@ private:
 bool checkLegalMove( Board b, Move m, char p);
 bool checkLegalMoveC( Board b, Move m, char p);
 void findMoves( Board b, char p );
+int MinValue( unsigned depth, unsigned maxDepth, Board b, Move m );
+int MaxValue( unsigned depth, unsigned maxDepth, Board b, Move m );
 
 char myType;
 char myPiece;

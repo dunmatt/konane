@@ -59,13 +59,13 @@ int main (int argc, char * const argv[]) {
 			};
 		} while ( (cols < 1) || (cols > MAX_COLS) );
 		do {
-			cout << "Is player 1 human (h), random (r), or minimax (m)? ";
+			cout << "Is player 1 human (h), random (r), minimax (m), or alpha-beta (a)? ";
 			cin >> playerType1;
-			if ( (playerType1 != 'h') && (playerType1 != 'r') && (playerType1 != 'm') ) {
-				cout << "Please enter h, r, or m" << endl;
+			if ( (playerType1 != 'h') && (playerType1 != 'r') && (playerType1 != 'm') && (playerType1 != 'a') ) {
+				cout << "Please enter h, r, m, or a" << endl;
 			}
-		} while ( (playerType1 != 'h') && (playerType1 != 'r') && (playerType1 != 'm') );
-		if (playerType1 == 'm') {
+		} while ( (playerType1 != 'h') && (playerType1 != 'r') && (playerType1 != 'm') && (playerType1 != 'a') );
+		if ((playerType1 == 'm') || (playerType1 == 'a')) {
 			cout << "What is the search depth for player 1? ";
 			cin >> depth1;
 		}
@@ -77,13 +77,13 @@ int main (int argc, char * const argv[]) {
 			}
 		} while ( (playerPiece1 != 'x') && (playerPiece1 != 'o') );
 		do {
-			cout << "Is player 2 human (h), random (r), or minimax (m)? ";
+			cout << "Is player 2 human (h), random (r), minimax (m), or alpha-beta (a)? ";
 			cin >> playerType2;
-			if ( (playerType2 != 'h') && (playerType2 != 'r') && (playerType2 != 'm') ) {
-				cout << "Please enter h, r, or m" << endl;
+			if ( (playerType2 != 'h') && (playerType2 != 'r') && (playerType2 != 'm') && (playerType2 != 'a') ) {
+				cout << "Please enter h, r, m, or a" << endl;
 			}
-		} while ( (playerType2 != 'h') && (playerType2 != 'r') && (playerType2 != 'm') );
-		if (playerType2 == 'm') {
+		} while ( (playerType2 != 'h') && (playerType2 != 'r') && (playerType2 != 'm') && (playerType2 != 'a') );
+		if ((playerType2 == 'm') || (playerType2 == 'a')) {
 			cout << "What is the search depth for player 2? ";
 			cin >> depth2;
 		}
@@ -116,6 +116,11 @@ int main (int argc, char * const argv[]) {
 					argv[i][0] = ' '; argv[i][1] = ' '; argv[i][2] = ' ';
 					depth1 = atoi(argv[i]);
 				}
+				else if ((argv[i][2] == 'a') || (argv[i][2] == 'A')) {
+					playerType1 = 'a';
+					argv[i][0] = ' '; argv[i][1] = ' '; argv[i][2] = ' ';
+					depth1 = atoi(argv[i]);
+				}
 				else {
 					cout << "Unknown player type: " << argv[i][2] << endl;
 				}
@@ -132,14 +137,19 @@ int main (int argc, char * const argv[]) {
 					argv[i][0] = ' '; argv[i][1] = ' '; argv[i][2] = ' ';
 					depth2 = atoi(argv[i]);
 				}
+				else if ((argv[i][2] == 'a') || (argv[i][2] == 'A')) {
+					playerType2 = 'a';
+					argv[i][0] = ' '; argv[i][1] = ' '; argv[i][2] = ' ';
+					depth2 = atoi(argv[i]);
+				}
 				else {
 					cout << "Unknown player type: " << argv[i][2] << endl;
 				}
 			}
 			else if (argv[i][1] == 'h') {
 				cout << "Usage: ./konane [-r <rows>] [-c <cols>] [-1 <p1type>] [-2 <p2type>]" << endl;
-				cout << "   p1type and p2type can be human (h), random (r), or minimax (m)" << endl;
-				cout << "   if player type is minimax, an optional integer gives the search depth" << endl;
+				cout << "   p1type and p2type can be human (h), random (r), minimax (m), or alpha-beta (a)" << endl;
+				cout << "   if player type is minimax or alpha-beta, an optional integer gives the search depth" << endl;
 				cout << "   For example: -2m3 specifies a maximum search depth of 3 for player 2" << endl;
 				cout << "Defaults: -r10 -c10 -1r -2r" << endl;
 				return 0;
